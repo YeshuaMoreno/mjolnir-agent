@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.models.conversation import Conversation
@@ -11,19 +12,21 @@ def process_chat(
     message: str,
     conversation_id: int | None,
 ) -> tuple[str, int]:
-    """
-    Persiste el intercambio user/assistant y devuelve (reply, conversation_id).
-    La generación de respuesta es un stub hasta integrar un LLM real.
-    """
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        return None, None  # el router convierte esto en 404
+    """Persiste el intercambio user/assistant y devuelve (reply, conversation_id)."""
+    if not db.query(User).filter(User.id == user_id).first():
+        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
 
-    if conversation_id is None:
-        title = message[:50] if len(message) > 50 else message
+    if conversation_id is not None:
+        conversation = db.query(Conversation).filter(Conversation.id == conversation_id).first()
+        if not conversation:
+            raise HTTPException(status_code=404, detail="Conversación no encontrada.")
+        if conversation.user_id != user_id:
+            raise HTTPException(status_code=403, detail="No tienes acceso a esta conversación.")
+    else:
+        title = message[:50]
         conversation = Conversation(user_id=user_id, title=title)
         db.add(conversation)
-        db.flush()  # obtiene el id sin hacer commit aún
+        db.flush()
         conversation_id = conversation.id
 
     db.add(Message(conversation_id=conversation_id, role="user", content=message))

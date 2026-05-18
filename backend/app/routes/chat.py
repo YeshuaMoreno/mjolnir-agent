@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -16,6 +16,4 @@ def chat(request: ChatRequest, db: Session = Depends(get_db)):
         message=request.message,
         conversation_id=request.conversation_id,
     )
-    if reply is None:
-        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
     return ChatResponse(reply=reply, conversation_id=conversation_id)
