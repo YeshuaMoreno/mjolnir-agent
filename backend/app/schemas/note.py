@@ -9,6 +9,11 @@ class NoteCreate(BaseModel):
     content: Optional[str] = None
 
 
+class NoteUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+
+
 class NoteOut(BaseModel):
     id: int
     user_id: int
