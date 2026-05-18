@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import Base, engine
-from app.routes import health, chat, conversations, tasks, notes
+from app.routes import health, chat, conversations, tasks, notes, users
 
 Base.metadata.create_all(bind=engine)
 
@@ -30,3 +30,4 @@ app.include_router(chat.router, prefix="/api", tags=["chat"])
 app.include_router(conversations.router, prefix="/api", tags=["conversations"])
 app.include_router(tasks.router, prefix="/api", tags=["tasks"])
 app.include_router(notes.router, prefix="/api", tags=["notes"])
+app.include_router(users.router, prefix="/api", tags=["users"])

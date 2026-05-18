@@ -1,11 +1,21 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+from app.database import get_db
 from app.schemas.chat import ChatRequest, ChatResponse
-from app.services.chat_service import process_message
+from app.services.chat_service import process_chat
 
 router = APIRouter()
 
 
 @router.post("/chat", response_model=ChatResponse)
-def chat(request: ChatRequest):
-    reply = process_message(request.message)
-    return ChatResponse(reply=reply, conversation_id=request.conversation_id)
+def chat(request: ChatRequest, db: Session = Depends(get_db)):
+    reply, conversation_id = process_chat(
+        db=db,
+        user_id=request.user_id,
+        message=request.message,
+        conversation_id=request.conversation_id,
+    )
+    if reply is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
+    return ChatResponse(reply=reply, conversation_id=conversation_id)
