@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
-import { ChatService } from '../../core/services/chat';
-import { UserService } from '../../core/services/user';
+import { ChatService } from '../../core/services/chat.service';
+import { UserService } from '../../core/services/user.service';
 import { Message } from '../../core/models/message.model';
 
 @Component({
@@ -19,10 +20,16 @@ export class ChatPage implements OnInit {
   sending = false;
   userId!: number;
 
-  constructor(private chatService: ChatService, private userService: UserService) {}
+  constructor(
+    private chatService: ChatService,
+    private userService: UserService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
-    this.userId = this.userService.getCurrentUserId()!;
+    const id = this.userService.getCurrentUserId();
+    if (!id) { this.router.navigate(['/user-select']); return; }
+    this.userId = id;
   }
 
   send() {

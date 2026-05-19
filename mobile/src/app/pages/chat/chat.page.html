@@ -7,7 +7,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #scrollContent>
+<ion-content>
   <div class="messages ion-padding">
     <div *ngFor="let msg of messages; trackBy: trackByIndex"
          [class.user-msg]="msg.role === 'user'"

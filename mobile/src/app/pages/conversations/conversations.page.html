@@ -13,6 +13,10 @@
 </ion-header>
 
 <ion-content class="ion-padding">
+  <ion-text color="danger" *ngIf="error">
+    <p>{{ error }}</p>
+  </ion-text>
+
   <ng-container *ngIf="!selectedTitle">
     <ion-list *ngIf="conversations.length; else empty">
       <ion-item *ngFor="let conv of conversations" button (click)="openConversation(conv)">
