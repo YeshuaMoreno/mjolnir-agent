@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Nueva tarea</ion-label>
+    <ion-input [(ngModel)]="newTitle" (keyup.enter)="create()"></ion-input>
+  </ion-item>
+  <ion-button expand="block" class="ion-margin-top" (click)="create()">Agregar</ion-button>
+
+  <ion-list class="ion-margin-top">
+    <ion-item *ngFor="let task of tasks">
+      <ion-checkbox slot="start" [checked]="task.status === 'done'" (ionChange)="toggleStatus(task)"></ion-checkbox>
+      <ion-label [class.done]="task.status === 'done'">{{ task.title }}</ion-label>
+      <ion-button slot="end" fill="clear" color="danger" (click)="delete(task)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Notas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="floating">Título</ion-label>
+    <ion-input [(ngModel)]="newTitle"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Contenido (opcional)</ion-label>
+    <ion-textarea [(ngModel)]="newContent" rows="3"></ion-textarea>
+  </ion-item>
+  <ion-button expand="block" class="ion-margin-top" (click)="create()">Agregar nota</ion-button>
+
+  <ion-list class="ion-margin-top">
+    <ion-item *ngFor="let note of notes">
+      <ion-label>
+        <h2>{{ note.title }}</h2>
+        <p *ngIf="note.content">{{ note.content }}</p>
+      </ion-label>
+      <ion-button slot="end" fill="clear" color="danger" (click)="delete(note)">
+        <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

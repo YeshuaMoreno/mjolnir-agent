@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content #scrollContent>
+  <div class="messages ion-padding">
+    <div *ngFor="let msg of messages; trackBy: trackByIndex"
+         [class.user-msg]="msg.role === 'user'"
+         [class.assistant-msg]="msg.role === 'assistant'"
+         class="msg-bubble">
+      <strong>{{ msg.role === 'user' ? 'Tú' : 'MJÖLNIR' }}</strong>
+      <p>{{ msg.content }}</p>
+    </div>
+    <ion-spinner *ngIf="sending" name="dots"></ion-spinner>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-row class="ion-align-items-center">
+      <ion-col>
+        <ion-input [(ngModel)]="input" placeholder="Escribe un mensaje..." (keyup.enter)="send()"></ion-input>
+      </ion-col>
+      <ion-col size="auto">
+        <ion-button (click)="send()" [disabled]="sending || !input.trim()">
+          <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>
